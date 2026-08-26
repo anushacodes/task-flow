@@ -49,6 +49,7 @@ class Project(Base):
     )
 
     workspace = relationship("Workspace", back_populates="projects")
+    tasks = relationship("Task", back_populates="project", cascade="all, delete-orphan")
 
     __table_args__ = (
         CheckConstraint("status IN ('ACTIVE', 'ARCHIVED')", name="ck_projects_status"),

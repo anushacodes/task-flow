@@ -12,6 +12,8 @@ from fastapi.responses import JSONResponse
 
 from app.api.auth import router as auth_router
 from app.api.projects import router as projects_router
+from app.api.tags import router as tags_router
+from app.api.tasks import router as tasks_router
 from app.api.workspaces import router as workspaces_router
 from app.core.config import settings
 from app.db.base import Base
@@ -84,3 +86,5 @@ async def health_check() -> dict[str, str]:
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(workspaces_router, prefix="/api/v1")
 app.include_router(projects_router, prefix="/api/v1")
+app.include_router(tags_router, prefix="/api/v1")
+app.include_router(tasks_router, prefix="/api/v1")

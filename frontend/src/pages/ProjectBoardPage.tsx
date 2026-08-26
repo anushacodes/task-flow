@@ -1,9 +1,19 @@
 import React from "react"
 import { useParams, Link } from "react-router-dom"
 import { ArrowLeft, CheckSquare, FolderKanban } from "lucide-react"
+import { KanbanBoard } from "@/features/board/KanbanBoard"
+import { TaskDetailModal } from "@/components/TaskDetail/TaskDetailModal"
 
 export const ProjectBoardPage: React.FC = () => {
   const { wsId, projectId } = useParams<{ wsId: string; projectId: string }>()
+
+  if (!wsId || !projectId) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-zinc-950 text-zinc-500 text-xs">
+        Invalid project route parameters.
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col selection:bg-indigo-600 selection:text-white">
@@ -36,16 +46,16 @@ export const ProjectBoardPage: React.FC = () => {
               <h1 className="text-xl font-bold tracking-tight text-zinc-100">Kanban Board</h1>
             </div>
             <p className="text-xs text-zinc-400 mt-1">
-              Workspace: <span className="font-mono text-zinc-300">{wsId}</span> · Project:{" "}
-              <span className="font-mono text-zinc-300">{projectId}</span>
+              Drag and drop tasks across columns to update workflow status
             </p>
           </div>
         </div>
 
-        <div className="rounded-xl border border-dashed border-zinc-800 bg-zinc-900/30 p-16 text-center text-zinc-500">
-          <p className="text-sm font-medium text-zinc-400">Kanban board and drag-and-drop tasks ready for Phase 4</p>
-          <p className="text-xs text-zinc-500 mt-1">Columns: To Do · In Progress · In Review · Done</p>
-        </div>
+        {/* Kanban Board Component */}
+        <KanbanBoard projectId={projectId} workspaceId={wsId} />
+
+        {/* Task Detail Drawer / Modal */}
+        <TaskDetailModal workspaceId={wsId} projectId={projectId} />
       </main>
     </div>
   )
