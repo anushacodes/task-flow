@@ -31,7 +31,6 @@ A modern, full-stack team task manager featuring Kanban boards, role-based works
 ## Quick Start (Docker)
 
 ```bash
-cd taskflow
 cp backend/.env.example backend/.env
 # Update SECRET_KEY and GROQ_API_KEY in backend/.env
 docker compose up
@@ -48,7 +47,7 @@ docker compose up
 ### 1. Backend Setup
 
 ```bash
-cd taskflow/backend
+cd backend
 python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 cp .env.example .env
@@ -59,7 +58,7 @@ uvicorn app.main:app --reload --port 8000
 ### 2. Frontend Setup
 
 ```bash
-cd taskflow/frontend
+cd frontend
 npm install
 cp .env.example .env.local
 npm run dev
@@ -71,11 +70,11 @@ npm run dev
 
 ```bash
 # Backend test suite (unit + integration)
-cd taskflow/backend
+cd backend
 pytest tests/
 
 # Frontend tests
-cd taskflow/frontend
+cd frontend
 npm test
 ```
 

@@ -1,0 +1,27 @@
+SPEC-KIT
+
+1. /speckit-specify
+
+Help me build a web app called TaskFlow, which is like a team task manager. 
+In this, there are users and workspaces, and a user can belong to multiple workspaces with a role per workspace. 
+It can be an owner, admin, or a member. There are projects, which consist of tasks that live inside the projects inside a workspace. 
+
+The fields would be:
+- title
+- description
+- status
+- due date
+- assignee
+- tags
+- commands
+
+ A task can block another task, and a blocked task can't move to in progress until its blocker is done. 
+ There are also recurring tasks that repeat weekly, so this should be like a Kanban-type board. 
+ You need to generate new instances on completion for recurring tasks. 
+ There's also a comments plus activities log, like an audit trail per task: who changed what and when. This is for the observability part. 
+ There should also be a search/filter API by status, assignee, and tags. 
+ I also want a quick add entry point where you can just take a natural language string, like "remind Anusha to review the deck by Friday," and then it parses it into a structured task using an LM call.
+
+
+2. /speckit-plan I want to use Python FastAPI in the backend and a simple React plus vite frontend.
+

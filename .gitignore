@@ -1,3 +1,57 @@
-.DS_Store
-commands.txt
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
 .env
+*.egg
+
+# Node / Frontend
+node_modules/
+frontend/dist/
+frontend/build/
+frontend/.vite/
+*.log
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.secret
+
+# Database
+*.sqlite
+*.db
+
+# Docker
+.dockerignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Test / Coverage
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+coverage/
+
+# Alembic
+# (keep versions/ tracked)
+
+# Misc
+*.tmp
+*.bak
