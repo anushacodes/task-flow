@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from app.models.project import Project
 from app.models.token import RefreshToken
 from app.models.user import User
 from app.models.workspace import ROLE_RANK, Workspace, WorkspaceMembership
@@ -11,5 +12,6 @@ __all__ = [
     "RefreshToken",
     "Workspace",
     "WorkspaceMembership",
+    "Project",
     "ROLE_RANK",
 ]
