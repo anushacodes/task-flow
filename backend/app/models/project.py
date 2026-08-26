@@ -5,8 +5,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime, timezone
 
-from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Index, String, Text, UniqueConstraint, func
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID
+from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Index, String, Text, UniqueConstraint, Uuid, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -18,12 +17,12 @@ class Project(Base):
     __tablename__ = "projects"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        PG_UUID(as_uuid=True).with_variant(String(36), "sqlite"),
+        Uuid(as_uuid=True),
         primary_key=True,
         default=uuid.uuid4,
     )
     workspace_id: Mapped[uuid.UUID] = mapped_column(
-        PG_UUID(as_uuid=True).with_variant(String(36), "sqlite"),
+        Uuid(as_uuid=True),
         ForeignKey("workspaces.id", ondelete="CASCADE"),
         nullable=False,
     )
@@ -31,7 +30,7 @@ class Project(Base):
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     status: Mapped[str] = mapped_column(String(20), default="ACTIVE", nullable=False)
     created_by_id: Mapped[uuid.UUID | None] = mapped_column(
-        PG_UUID(as_uuid=True).with_variant(String(36), "sqlite"),
+        Uuid(as_uuid=True),
         ForeignKey("users.id"),
         nullable=True,
     )
@@ -50,7 +49,6 @@ class Project(Base):
     )
 
     workspace = relationship("Workspace", back_populates="projects")
-    tasks = relationship("Task", back_populates="project", cascade="all, delete-orphan")
 
     __table_args__ = (
         CheckConstraint("status IN ('ACTIVE', 'ARCHIVED')", name="ck_projects_status"),

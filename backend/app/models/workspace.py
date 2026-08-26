@@ -5,8 +5,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime, timezone
 
-from sqlalchemy import Boolean, CheckConstraint, DateTime, ForeignKey, Index, String, Text, func
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID
+from sqlalchemy import Boolean, CheckConstraint, DateTime, ForeignKey, Index, String, Text, Uuid, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -24,14 +23,14 @@ class Workspace(Base):
     __tablename__ = "workspaces"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        PG_UUID(as_uuid=True).with_variant(String(36), "sqlite"),
+        Uuid(as_uuid=True),
         primary_key=True,
         default=uuid.uuid4,
     )
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     owner_id: Mapped[uuid.UUID] = mapped_column(
-        PG_UUID(as_uuid=True).with_variant(String(36), "sqlite"),
+        Uuid(as_uuid=True),
         ForeignKey("users.id"),
         nullable=False,
         index=True,
@@ -61,18 +60,18 @@ class WorkspaceMembership(Base):
     __tablename__ = "workspace_memberships"
 
     workspace_id: Mapped[uuid.UUID] = mapped_column(
-        PG_UUID(as_uuid=True).with_variant(String(36), "sqlite"),
+        Uuid(as_uuid=True),
         ForeignKey("workspaces.id", ondelete="CASCADE"),
         primary_key=True,
     )
     user_id: Mapped[uuid.UUID] = mapped_column(
-        PG_UUID(as_uuid=True).with_variant(String(36), "sqlite"),
+        Uuid(as_uuid=True),
         ForeignKey("users.id", ondelete="CASCADE"),
         primary_key=True,
     )
     role: Mapped[str] = mapped_column(String(20), nullable=False, default="MEMBER")
     invited_by_id: Mapped[uuid.UUID | None] = mapped_column(
-        PG_UUID(as_uuid=True).with_variant(String(36), "sqlite"),
+        Uuid(as_uuid=True),
         ForeignKey("users.id"),
         nullable=True,
     )
@@ -84,7 +83,7 @@ class WorkspaceMembership(Base):
     )
 
     workspace = relationship("Workspace", back_populates="members")
-    user = relationship("User", back_populates="memberships")
+    user = relationship("User", back_populates="memberships", foreign_keys=[user_id])
 
     __table_args__ = (
         CheckConstraint("role IN ('OWNER', 'ADMIN', 'MEMBER')", name="ck_workspace_memberships_role"),

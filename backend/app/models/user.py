@@ -5,8 +5,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime, timezone
 
-from sqlalchemy import Boolean, DateTime, String, Text, UniqueConstraint, func
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID
+from sqlalchemy import Boolean, DateTime, String, Text, UniqueConstraint, Uuid, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -18,7 +17,7 @@ class User(Base):
     __tablename__ = "users"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        PG_UUID(as_uuid=True).with_variant(String(36), "sqlite"),
+        Uuid(as_uuid=True),
         primary_key=True,
         default=uuid.uuid4,
     )
@@ -41,7 +40,12 @@ class User(Base):
         nullable=False,
     )
 
-    memberships = relationship("WorkspaceMembership", back_populates="user", cascade="all, delete-orphan")
+    memberships = relationship(
+        "WorkspaceMembership",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        primaryjoin="User.id == foreign(WorkspaceMembership.user_id)",
+    )
 
     __table_args__ = (
         UniqueConstraint("email", name="uq_users_email"),
