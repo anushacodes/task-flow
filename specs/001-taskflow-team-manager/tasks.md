@@ -14,15 +14,15 @@
 
 **Purpose**: Project scaffolding, tooling, and dev environment. No user story depends on another in this phase — all are parallel once Docker is up.
 
-- [ ] T001 Create monorepo directory containing `backend/`, `frontend/`, and `docker-compose.yml`
-- [ ] T002 [P] Initialize FastAPI backend: create `backend/pyproject.toml` with dependencies (`fastapi`, `uvicorn[standard]`, `sqlalchemy[asyncio]`, `asyncpg`, `alembic`, `pyjwt[crypto]`, `pwdlib[argon2]`, `pydantic-settings`, `openai>=1.30`, `dateparser`, `rapidfuzz`, `tenacity`, `sse-starlette`, `aiosqlite`) and dev extras (`pytest`, `pytest-asyncio`, `httpx`, `ruff`, `mypy`)
-- [ ] T003 [P] Initialize React/Vite frontend: run `npm create vite@latest frontend -- --template react-ts`, install dependencies (`@tanstack/react-query`, `zustand`, `react-router-dom`, `@dnd-kit/core`, `@dnd-kit/sortable`, `axios`, `react-hook-form`, `zod`, `@hookform/resolvers`) in `frontend/`
-- [ ] T004 [P] Install and configure shadcn/ui + Tailwind CSS in `frontend/` (run `npx shadcn@latest init`, configure `frontend/tailwind.config.ts` and `frontend/src/index.css`)
-- [ ] T005 [P] Create `backend/app/` package skeleton: empty `__init__.py` files under `app/`, `app/api/`, `app/models/`, `app/schemas/`, `app/services/`, `app/db/`, `app/core/`
-- [ ] T006 [P] Create `frontend/src/` directory structure: `api/`, `components/`, `pages/`, `features/auth/`, `features/board/`, `features/tasks/`, `hooks/`, `stores/`
-- [ ] T007 [P] Write `docker-compose.yml` at repo root with services: `postgres` (postgres:16, port 5432, env POSTGRES_DB/USER/PASSWORD), `backend` (build `./backend`, port 8000, depends_on postgres), `frontend` (build `./frontend`, port 5173)
-- [ ] T008 [P] Create `backend/.env.example` and `backend/app/core/config.py` using `pydantic-settings`: fields `DATABASE_URL`, `SECRET_KEY`, `ACCESS_TOKEN_EXPIRE_MINUTES=15`, `REFRESH_TOKEN_EXPIRE_DAYS=7`, `OPENAI_API_KEY`, `ENVIRONMENT=development`
-- [ ] T009 [P] Configure Ruff linting + Black formatting in `backend/pyproject.toml` (`[tool.ruff]` section) and add `backend/.ruff.toml`; configure ESLint + Prettier in `frontend/`
+- [x] T001 Create monorepo root with `taskflow/` directory containing `backend/`, `frontend/`, and `docker-compose.yml`
+- [x] T002 [P] Initialize FastAPI backend: create `backend/pyproject.toml` with dependencies (`fastapi`, `uvicorn[standard]`, `sqlalchemy[asyncio]`, `asyncpg`, `alembic`, `pyjwt[crypto]`, `pwdlib[argon2]`, `pydantic-settings`, `openai>=1.30`, `dateparser`, `rapidfuzz`, `tenacity`, `sse-starlette`, `aiosqlite`) and dev extras (`pytest`, `pytest-asyncio`, `httpx`, `ruff`, `mypy`)
+- [x] T003 [P] Initialize React/Vite frontend: run `npm create vite@latest frontend -- --template react-ts`, install dependencies (`@tanstack/react-query`, `zustand`, `react-router-dom`, `@dnd-kit/core`, `@dnd-kit/sortable`, `axios`, `react-hook-form`, `zod`, `@hookform/resolvers`) in `frontend/`
+- [x] T004 [P] Install and configure shadcn/ui + Tailwind CSS in `frontend/` (run `npx shadcn@latest init`, configure `frontend/tailwind.config.ts` and `frontend/src/index.css`)
+- [x] T005 [P] Create `backend/app/` package skeleton: empty `__init__.py` files under `app/`, `app/api/`, `app/models/`, `app/schemas/`, `app/services/`, `app/db/`, `app/core/`
+- [x] T006 [P] Create `frontend/src/` directory structure: `api/`, `components/`, `pages/`, `features/auth/`, `features/board/`, `features/tasks/`, `hooks/`, `stores/`
+- [x] T007 [P] Write `docker-compose.yml` at repo root with services: `postgres` (postgres:16, port 5432, env POSTGRES_DB/USER/PASSWORD), `backend` (build `./backend`, port 8000, depends_on postgres), `frontend` (build `./frontend`, port 5173)
+- [x] T008 [P] Create `backend/.env.example` and `backend/app/core/config.py` using `pydantic-settings`: fields `DATABASE_URL`, `SECRET_KEY`, `ACCESS_TOKEN_EXPIRE_MINUTES=15`, `REFRESH_TOKEN_EXPIRE_DAYS=7`, `OPENAI_API_KEY`, `ENVIRONMENT=development`
+- [x] T009 [P] Configure Ruff linting + Black formatting in `backend/pyproject.toml` (`[tool.ruff]` section) and add `backend/.ruff.toml`; configure ESLint + Prettier in `frontend/`
 
 **Checkpoint**: `docker compose up` starts postgres, backend returns 200 on `GET /health`, frontend dev server loads at localhost:5173.
 
