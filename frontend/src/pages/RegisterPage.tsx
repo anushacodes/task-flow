@@ -32,7 +32,16 @@ export const RegisterPage: React.FC = () => {
       await authRegister(data.email, data.name, data.password)
       navigate("/workspaces")
     } catch (err: any) {
-      setErrorMessage(err.response?.data?.detail || "Registration failed. Please try again.")
+      const detail = err.response?.data?.detail
+      if (typeof detail === "string") {
+        setErrorMessage(detail)
+      } else if (Array.isArray(detail)) {
+        setErrorMessage(detail.map((e: any) => e.msg || e.message).join(", "))
+      } else if (err.message) {
+        setErrorMessage(err.message)
+      } else {
+        setErrorMessage("Registration failed. Please try again.")
+      }
     }
   }
 

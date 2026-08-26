@@ -14,11 +14,16 @@ from app.api.auth import router as auth_router
 from app.api.projects import router as projects_router
 from app.api.workspaces import router as workspaces_router
 from app.core.config import settings
+from app.db.base import Base
+from app.db.engine import async_engine
+import app.models  # noqa: F401
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Application startup and shutdown lifespan context."""
+    async with async_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
     yield
 
 

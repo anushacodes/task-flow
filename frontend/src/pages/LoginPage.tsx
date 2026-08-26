@@ -31,7 +31,16 @@ export const LoginPage: React.FC = () => {
       await login(data.email, data.password)
       navigate("/workspaces")
     } catch (err: any) {
-      setErrorMessage(err.response?.data?.detail || "Authentication failed. Please check your credentials.")
+      const detail = err.response?.data?.detail
+      if (typeof detail === "string") {
+        setErrorMessage(detail)
+      } else if (Array.isArray(detail)) {
+        setErrorMessage(detail.map((e: any) => e.msg || e.message).join(", "))
+      } else if (err.message) {
+        setErrorMessage(err.message)
+      } else {
+        setErrorMessage("Authentication failed. Please check your credentials.")
+      }
     }
   }
 
