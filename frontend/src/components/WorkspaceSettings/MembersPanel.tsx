@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { Users, UserPlus, Trash2, X, Loader2 } from "lucide-react"
 import {
   inviteWorkspaceMember,
   listWorkspaceMembers,
@@ -75,88 +76,129 @@ export const MembersPanel: React.FC<MembersPanelProps> = ({
   }
 
   if (isLoading) {
-    return <div className="text-sm text-muted-foreground p-4">Loading members...</div>
+    return (
+      <div className="flex items-center justify-center p-12 text-xs text-zinc-500 animate-pulse">
+        Loading members...
+      </div>
+    )
   }
 
   return (
-    <div className="rounded-lg border bg-card p-6 shadow-sm">
-      <div className="flex justify-between items-center mb-6">
+    <div className="rounded-xl border border-zinc-800/80 bg-zinc-900/60 p-6 shadow-sm">
+      {/* Top Header */}
+      <div className="flex justify-between items-center mb-6 pb-4 border-b border-zinc-800/80">
         <div>
-          <h2 className="text-lg font-semibold">Workspace Teammates</h2>
-          <p className="text-sm text-muted-foreground">Manage members and workspace permissions</p>
+          <div className="flex items-center gap-2">
+            <Users className="h-4 w-4 text-indigo-400" />
+            <h2 className="text-base font-semibold text-zinc-100">Workspace Teammates</h2>
+          </div>
+          <p className="text-xs text-zinc-400 mt-0.5">Manage team access, permissions, and invitations</p>
         </div>
         {canManageMembers && (
           <button
             onClick={() => setIsInviteOpen(true)}
-            className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+            className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-1.5 text-xs font-medium text-white hover:bg-indigo-500 transition-colors shadow-sm"
           >
-            Invite Member
+            <UserPlus className="h-3.5 w-3.5" />
+            <span>Invite Member</span>
           </button>
         )}
       </div>
 
+      {/* Invite Member Drawer/Card */}
       {isInviteOpen && (
-        <div className="mb-6 rounded-lg border bg-muted/30 p-4">
-          <h3 className="text-sm font-semibold mb-3">Invite new teammate</h3>
+        <div className="mb-6 rounded-xl border border-zinc-800 bg-zinc-950 p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-300">Invite new teammate</h3>
+            <button
+              onClick={() => {
+                setIsInviteOpen(false)
+                setErrorMessage(null)
+              }}
+              className="text-zinc-500 hover:text-zinc-300 p-1"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
           {errorMessage && (
-            <div className="mb-3 rounded bg-destructive/15 p-2 text-xs text-destructive font-medium">
+            <div className="mb-3 rounded-lg border border-red-900/50 bg-red-950/40 p-2.5 text-xs text-red-400">
               {errorMessage}
             </div>
           )}
-          <form onSubmit={handleInviteSubmit} className="flex gap-3 items-end">
-            <div className="flex-1">
-              <label className="block text-xs font-medium mb-1">Email address</label>
-              <input
-                type="email"
-                required
-                value={inviteEmail}
-                onChange={(e) => setInviteEmail(e.target.value)}
-                placeholder="colleague@example.com"
-                className="w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm"
-              />
+
+          <form onSubmit={handleInviteSubmit} className="flex flex-col sm:flex-row gap-3 items-end">
+            <div className="flex-1 w-full">
+              <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-zinc-400">
+                Email Address
+              </label>
+              <div className="relative">
+                <input
+                  type="email"
+                  required
+                  value={inviteEmail}
+                  onChange={(e) => setInviteEmail(e.target.value)}
+                  placeholder="colleague@example.com"
+                  className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 placeholder:text-zinc-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors"
+                />
+              </div>
             </div>
-            <div>
-              <label className="block text-xs font-medium mb-1">Role</label>
+
+            <div className="w-full sm:w-36">
+              <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-zinc-400">
+                Role
+              </label>
               <select
                 value={inviteRole}
                 onChange={(e) => setInviteRole(e.target.value as "ADMIN" | "MEMBER")}
-                className="rounded-md border border-input bg-background px-3 py-1.5 text-sm"
+                className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs text-zinc-200 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors cursor-pointer"
               >
                 <option value="MEMBER">Member</option>
                 <option value="ADMIN">Admin</option>
               </select>
             </div>
-            <button
-              type="submit"
-              disabled={inviteMutation.isPending}
-              className="rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-            >
-              {inviteMutation.isPending ? "Sending..." : "Send Invite"}
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setIsInviteOpen(false)
-                setErrorMessage(null)
-              }}
-              className="rounded-md border bg-background px-3 py-1.5 text-sm font-medium hover:bg-muted"
-            >
-              Cancel
-            </button>
+
+            <div className="flex gap-2 w-full sm:w-auto">
+              <button
+                type="submit"
+                disabled={inviteMutation.isPending}
+                className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-500 disabled:opacity-50 transition-colors shadow-sm"
+              >
+                {inviteMutation.isPending ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    <span>Sending...</span>
+                  </>
+                ) : (
+                  <span>Send Invite</span>
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsInviteOpen(false)
+                  setErrorMessage(null)
+                }}
+                className="rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs font-medium text-zinc-300 hover:bg-zinc-800 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
           </form>
         </div>
       )}
 
-      <div className="divide-y">
+      {/* Member List */}
+      <div className="divide-y divide-zinc-800/70">
         {members?.map((member: WorkspaceMember) => (
-          <div key={member.user_id} className="py-3 flex items-center justify-between">
+          <div key={member.user_id} className="py-3.5 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-semibold text-sm">
+              <div className="h-8 w-8 rounded-lg bg-indigo-600/15 border border-indigo-500/20 text-indigo-400 flex items-center justify-center font-semibold text-xs">
                 {member.name.charAt(0).toUpperCase()}
               </div>
               <div>
-                <p className="text-sm font-medium leading-none">{member.name}</p>
-                <p className="text-xs text-muted-foreground mt-1">{member.email}</p>
+                <p className="text-xs font-medium text-zinc-100">{member.name}</p>
+                <p className="text-[11px] text-zinc-500 mt-0.5">{member.email}</p>
               </div>
             </div>
 
@@ -171,19 +213,19 @@ export const MembersPanel: React.FC<MembersPanelProps> = ({
                     })
                   }
                   disabled={updateRoleMutation.isPending}
-                  className="text-xs rounded border border-input bg-background px-2 py-1"
+                  className="text-xs rounded-md border border-zinc-800 bg-zinc-950 px-2.5 py-1 text-zinc-200 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
                 >
                   <option value="MEMBER">Member</option>
                   <option value="ADMIN">Admin</option>
                 </select>
               ) : (
                 <span
-                  className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                  className={`text-[11px] font-medium px-2 py-0.5 rounded-full border ${
                     member.role === "OWNER"
-                      ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"
+                      ? "border-amber-500/30 bg-amber-500/10 text-amber-400"
                       : member.role === "ADMIN"
-                      ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300"
-                      : "bg-muted text-muted-foreground"
+                      ? "border-indigo-500/30 bg-indigo-500/10 text-indigo-400"
+                      : "border-zinc-800 bg-zinc-800/80 text-zinc-400"
                   }`}
                 >
                   {member.role}
@@ -197,9 +239,10 @@ export const MembersPanel: React.FC<MembersPanelProps> = ({
                       removeMutation.mutate(member.user_id)
                     }
                   }}
-                  className="text-xs text-destructive hover:underline"
+                  className="p-1 rounded-md text-zinc-500 hover:text-red-400 hover:bg-zinc-800 transition-colors"
+                  title="Remove member"
                 >
-                  Remove
+                  <Trash2 className="h-3.5 w-3.5" />
                 </button>
               )}
             </div>
